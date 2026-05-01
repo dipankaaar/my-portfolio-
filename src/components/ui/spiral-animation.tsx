@@ -25,6 +25,7 @@ class AnimationController {
     private time = 0
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
+    private dpr: number
     private width: number
     private height: number
     private stars: Star[] = []
