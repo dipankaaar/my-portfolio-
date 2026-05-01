@@ -29,35 +29,57 @@ const services = [
 
 import { SpotlightCard } from "../ui/spotlight-card";
 
+import { HandCard } from "../ui/hand-card";
+
 export const Services = () => {
   return (
-    <section id="services" className="py-24 px-6 max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold mb-16 text-center">
-        Strategic <span className="text-gradient">AI Solutions</span>
-      </h2>
+    <section id="services" className="py-24 px-6 max-w-7xl mx-auto relative overflow-hidden">
+      {/* Decorative Blueprint Corner */}
+      <div className="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none">
+        <svg viewBox="0 0 100 100" className="w-full h-full text-[var(--fg-pencil)]">
+          <path d="M0,0 L100,100 M20,0 L100,80 M0,20 L80,100" stroke="currentColor" strokeWidth="1" fill="none" />
+        </svg>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="relative inline-block mb-16">
+        <motion.h2 
+          layoutId="services"
+          className="text-4xl md:text-5xl font-mono font-bold text-[var(--fg-pencil)]"
+        >
+          Specialized Services
+        </motion.h2>
+        <div className="absolute -bottom-4 left-0 w-full h-2 bg-[var(--accent-blue)]/20 rounded-full" />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {services.map((service, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            whileHover={{ y: -5, rotate: i % 2 === 0 ? 1 : -1 }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
+            viewport={{ once: true }}
           >
-            <SpotlightCard className="h-full p-8 border-cyan/20 bg-navy/60 hover:bg-navy/80 hover:border-cyan hover:shadow-[0_0_25px_rgba(100,255,218,0.15)] group transition-all duration-300 overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-tr from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute top-0 left-0 w-0 h-[2px] bg-cyan group-hover:w-full transition-all duration-500 ease-in-out" />
-              <div className="mb-6 p-4 bg-lightest-navy/20 backdrop-blur-sm rounded-xl group-hover:bg-cyan/10 transition-colors inline-block border border-transparent group-hover:border-cyan/30 shadow-lg">
+            <HandCard 
+              variant={i % 2 === 0 ? "default" : "post-it"}
+              decoration={i === 0 ? "tack" : "none"}
+              className="h-full"
+            >
+              <div className="mb-6 p-4 border-[3px] border-[var(--fg-pencil)] rounded-[var(--radius-wobbly)] bg-white shadow-[3px_3px_0px_0px_var(--fg-pencil)] inline-block">
                 {service.icon}
               </div>
-              <h3 className="text-xl font-bold mb-4 text-foreground group-hover:text-cyan transition-colors relative z-10">
+              
+              <h3 className="text-2xl font-mono font-bold mb-4 text-[var(--fg-pencil)] border-b-2 border-dashed border-[var(--fg-pencil)]/30 pb-2">
                 {service.title}
               </h3>
-              <p className="text-slate text-sm leading-relaxed relative z-10">
+              
+              <p className="text-[var(--fg-pencil)] font-sans text-lg leading-relaxed opacity-90">
                 {service.desc}
               </p>
-            </SpotlightCard>
+
+
+            </HandCard>
           </motion.div>
         ))}
       </div>

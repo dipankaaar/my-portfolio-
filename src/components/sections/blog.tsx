@@ -58,7 +58,7 @@ const posts = [
 
 export const Blog = () => {
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto">
+    <section id="blog" className="py-24 px-6 max-w-7xl mx-auto relative">
       <h2 className="text-3xl font-bold mb-16 flex items-center">
         <span className="text-cyan font-mono mr-2 text-xl">04.</span> Latest Articles
         <span className="h-[1px] bg-lightest-navy flex-1 ml-4" />
@@ -79,6 +79,7 @@ export const Blog = () => {
                 src={post.image}
                 alt={post.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
             </div>

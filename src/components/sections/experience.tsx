@@ -1,8 +1,7 @@
-"use client";
-
-import React from "react";
-import { motion } from "framer-motion";
-import { Briefcase, GraduationCap, Award } from "lucide-react";
+import React, { useRef } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { Briefcase, GraduationCap, Star, ArrowRight } from "lucide-react";
+import { HandCard } from "../ui/hand-card";
 
 const experienceData = [
   {
@@ -16,7 +15,8 @@ const experienceData = [
       "Worked with OpenAI, LangChain, and modern AI tools",
       "Created scalable solutions for real-world use cases"
     ],
-    icon: <Briefcase className="w-5 h-5" />,
+    icon: Briefcase,
+    note: "Primary_Growth"
   },
   {
     type: "education",
@@ -24,81 +24,161 @@ const experienceData = [
     company: "MAKAUT",
     date: "2023 - 2027",
     desc: "Actively pursuing underlying fundamentals of computer sciences, software engineering, and managing databases.",
-    icon: <GraduationCap className="w-5 h-5" />,
+    icon: GraduationCap,
+    note: "Academic_Ref_01"
   },
   {
     type: "education",
     title: "Higher Secondary (H.S)",
     company: "W.B.C.H.S.E",
     date: "2021 - 2023",
-    desc: "",
-    icon: <GraduationCap className="w-5 h-5" />,
+    desc: "Focused on Science and Mathematics with an emphasis on logical reasoning and analytical skills.",
+    icon: GraduationCap,
+    note: "Foundation_Node"
   },
   {
     type: "education",
     title: "Madhyamik Pariksha (M.P)",
     company: "W.B.B.S.E",
     date: "Completed in 2021",
-    desc: "",
-    icon: <GraduationCap className="w-5 h-5" />,
+    desc: "Achieved excellence in core subjects with a focus on problem-solving and mathematics.",
+    icon: GraduationCap,
+    note: "Entry_Point"
   }
 ];
 
 export const Experience = () => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end center"]
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 200,
+    damping: 40,
+    restDelta: 0.001
+  });
+
   return (
-    <section id="experience" className="py-24 px-6 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold mb-16 flex items-center">
-        Experience & Education
-        <span className="h-[1px] bg-lightest-navy flex-1 ml-6" />
-      </h2>
+    <section id="experience" ref={containerRef} className="py-32 px-6 max-w-5xl mx-auto relative overflow-hidden">
+      {/* Cinematic Decorations */}
+      <div className="absolute top-0 right-10 text-[10px] font-mono text-[var(--fg-pencil)]/20 uppercase tracking-widest -rotate-90">
+        Timeline_Registry // Seq_88
+      </div>
 
-      <div className="relative border-l-2 border-navy ml-4 md:ml-0 md:pl-0">
-        {/* Glowing animated line background */}
-        <motion.div 
-          className="absolute left-[-2px] inset-y-0 w-[4px] bg-gradient-to-b from-cyan via-purple-500 to-transparent blur-[2px] opacity-50"
-          animate={{ opacity: [0.3, 0.8, 0.3] }}
-          transition={{ repeat: Infinity, duration: 4 }}
-        />
+      <div className="relative inline-block mb-24">
+        <motion.h2 
+          layoutId="experience"
+          className="text-4xl md:text-6xl font-mono font-bold text-[var(--fg-pencil)]"
+        >
+          The Journey
+        </motion.h2>
+        {/* Sketchy underline */}
+        <svg className="absolute -bottom-2 left-0 w-full h-4 text-[var(--accent-red)]/30" viewBox="0 0 100 10" preserveAspectRatio="none">
+          <path d="M0,5 Q25,0 50,5 T100,5" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
+        </svg>
+      </div>
 
-        {experienceData.map((item, i) => (
+      <div className="relative ml-4 md:ml-0">
+        {/* Pro Technical Timeline Line */}
+        <div className="absolute left-[1px] md:left-[1px] top-0 bottom-0 w-[3px] bg-[var(--fg-pencil)]/10 rounded-full">
+          {/* Animated fill line */}
+          <motion.div 
+            className="w-full bg-[var(--accent-red)] origin-top h-full shadow-[0_0_10px_var(--accent-red)]"
+            style={{ scaleY }}
+          />
+          
+          {/* Pro Tracker / Playhead (Diamond) */}
           <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -50, scale: 0.9, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, type: "spring", bounce: 0.4, delay: i * 0.15 }}
-            className="mb-12 relative pl-8 group/timeline"
+            className="absolute left-1/2 w-5 h-5 bg-white border-[3px] border-[var(--accent-red)] z-30 shadow-[0_0_15px_rgba(255,0,0,0.3)]"
+            style={{ 
+              top: useTransform(scaleY, [0, 1], ["0%", "100%"]),
+              x: "-50%",
+              y: "-50%",
+              rotate: 45
+            }}
           >
-            {/* Glowing Dot on line */}
-            <div className="absolute left-0 -translate-x-1/2 top-0 w-8 h-8 rounded-full bg-navy border-2 border-cyan flex items-center justify-center text-cyan z-10 transition-transform duration-300 group-hover/timeline:scale-125 group-hover/timeline:shadow-[0_0_20px_#64ffda]">
-              <div className="absolute inset-0 rounded-full animate-ping bg-cyan/20" />
-              {item.icon}
-            </div>
-
-            <div className="bg-navy/40 backdrop-blur-md p-6 rounded-lg border border-cyan/10 hover:border-cyan hover:shadow-[0_0_30px_rgba(100,255,218,0.15)] transition-all duration-300 group relative overflow-hidden">
-              {/* Inner glowing hover trace */}
-              <div className="absolute top-0 left-0 w-[2px] h-0 bg-cyan group-hover:h-full transition-all duration-300" />
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <span className="text-cyan font-mono text-sm mb-2 block relative z-10">
-                {item.date}
-              </span>
-              <h3 className="text-xl font-bold group-hover:text-cyan text-foreground transition-colors relative z-10">
-                {item.title}
-              </h3>
-              <p className="text-light-slate font-medium mb-4 relative z-10">{item.company}</p>
-              {Array.isArray(item.desc) ? (
-                <ul className="text-slate text-sm leading-relaxed relative z-10 list-disc ml-5 space-y-2 mt-4">
-                  {item.desc.map((bullet, idx) => (
-                    <li key={idx} className="pl-1 marker:text-cyan">{bullet}</li>
-                  ))}
-                </ul>
-              ) : item.desc ? (
-                <p className="text-slate text-sm leading-relaxed relative z-10">{item.desc}</p>
-              ) : null}
-            </div>
+            {/* Inner pulsing dot */}
+            <motion.div 
+              animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.5, 1, 0.5] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="absolute inset-0 m-auto w-1.5 h-1.5 bg-[var(--accent-red)] rounded-full"
+            />
           </motion.div>
-        ))}
+        </div>
+
+        {experienceData.map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.9, x: -20 }}
+              whileInView={{ opacity: 1, scale: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ type: "spring", stiffness: 300, damping: 25, delay: i * 0.1 }}
+              className="mb-20 relative pl-12 group/timeline"
+            >
+              {/* Technical Measurement Bracket */}
+              <div className="absolute left-0 top-0 w-12 h-px bg-[var(--fg-pencil)]/20 transition-all duration-500 group-hover/timeline:w-16 group-hover/timeline:bg-[var(--accent-red)]/40" />
+              <div className="absolute left-[48px] top-0 h-4 w-px bg-[var(--fg-pencil)]/20 transition-all duration-500 group-hover/timeline:left-[64px] group-hover/timeline:bg-[var(--accent-red)]/40" />
+              
+              {/* Timeline Node Badge */}
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 10 }}
+                className="absolute left-0 -translate-x-1/2 top-0 w-12 h-12 rounded-xl bg-white border-[3px] border-[var(--fg-pencil)] flex items-center justify-center text-[var(--fg-pencil)] z-20 shadow-[4px_4px_0px_0px_var(--fg-pencil)] group-hover/timeline:bg-[var(--bg-post-it)] group-hover/timeline:text-[var(--accent-red)] group-hover/timeline:border-[var(--accent-red)] transition-colors duration-300"
+              >
+                <Icon size={20} strokeWidth={3} />
+              </motion.div>
+
+              <HandCard 
+                decoration={i % 2 === 0 ? "tape" : "tack"}
+                className="bg-white border-[3px] border-[var(--fg-pencil)] shadow-[8px_8px_0px_0px_var(--fg-pencil)] group-hover/timeline:shadow-[12px_12px_0px_0px_var(--accent-blue)] group-hover/timeline:-translate-y-1 transition-all duration-500 overflow-hidden"
+              >
+                {/* Background Blueprint detail */}
+                <div className="absolute top-2 right-4 opacity-[0.05] pointer-events-none group-hover/timeline:opacity-10 group-hover/timeline:scale-110 transition-all duration-700">
+                   <Icon size={120} strokeWidth={1} />
+                </div>
+
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 relative z-10">
+                  <div>
+                    <span className="inline-block px-3 py-1 bg-[var(--accent-red)]/5 text-[var(--accent-red)] font-mono font-bold text-xs rounded-[var(--radius-wobbly)] border-2 border-[var(--accent-red)]/10 mb-2">
+                      {item.date}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-mono font-bold text-[var(--fg-pencil)] leading-tight group-hover/timeline:text-[var(--accent-blue)] transition-colors">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <div className="flex items-center gap-2 text-[var(--fg-pencil)] opacity-60 font-mono font-bold bg-[var(--bg-post-it)]/30 px-3 py-2 rounded-lg border-2 border-dashed border-[var(--fg-pencil)]/10">
+                    <Star size={16} />
+                    {item.company}
+                  </div>
+                </div>
+
+                <div className="relative z-10">
+                  {Array.isArray(item.desc) ? (
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {item.desc.map((bullet, idx) => (
+                        <motion.li 
+                          key={idx} 
+                          whileHover={{ x: 5 }}
+                          className="flex items-start gap-2 text-[var(--fg-pencil)] font-sans font-medium text-lg"
+                        >
+                          <ArrowRight size={18} className="mt-1 text-[var(--accent-blue)] flex-shrink-0" />
+                          <span>{bullet}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  ) : item.desc ? (
+                    <p className="text-[var(--fg-pencil)] font-sans text-lg leading-relaxed italic border-l-4 border-[var(--bg-post-it)] pl-6 py-2">
+                      {item.desc}
+                    </p>
+                  ) : null}
+                </div>
+              </HandCard>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );

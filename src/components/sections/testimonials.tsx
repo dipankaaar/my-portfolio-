@@ -34,7 +34,7 @@ const testimonials = [
 
 export const Testimonials = () => {
   return (
-    <section className="py-24 px-6 max-w-5xl mx-auto">
+    <section id="testimonials" className="py-24 px-6 max-w-5xl mx-auto relative">
       <h2 className="text-3xl font-bold mb-16 text-center">What People Say</h2>
 
       <Swiper
@@ -63,7 +63,7 @@ export const Testimonials = () => {
 
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-full border-2 border-cyan/30 overflow-hidden relative">
-                    <Image src={t.avatar} alt={t.name} fill className="object-cover" />
+                    <Image src={t.avatar} alt={t.name} fill sizes="150px" className="object-cover" />
                   </div>
                   <div className="text-left">
                     <h4 className="font-bold text-foreground">{t.name}</h4>

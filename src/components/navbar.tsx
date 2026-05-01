@@ -2,126 +2,146 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ThemeToggle } from "./ui/theme-toggle";
 
-const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "AI Agents", href: "#ai-agents" },
-  { name: "Experience", href: "#experience" },
-  { name: "Projects", href: "#projects" },
-  { name: "Services", href: "#services" },
-  { name: "Contact", href: "#contact" },
+const navItems = [
+  { name: "About", id: "about" },
+  { name: "AI Agents", id: "ai-agents" },
+  { name: "Experience", id: "experience" },
+  { name: "Certificates", id: "certificates" },
+  { name: "Projects", id: "projects" },
+  { name: "Services", id: "services" },
+  { name: "Contact", id: "contact" },
 ];
 
-export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface NavbarProps {
+  activeSection?: string | null;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-[10000] transition-all duration-300 px-6 md:px-12 py-4",
-        scrolled ? "glass-morphism h-16 shadow-lg" : "bg-transparent h-20"
-      )}
+    <motion.nav
+      initial={{ y: -150, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ 
+        type: "spring", 
+        stiffness: 120, 
+        damping: 15, 
+        duration: 0.6, 
+        delay: 0.1 
+      }}
+      className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        scrolled ? "w-[95%] md:w-[80%] max-w-5xl" : "w-[90%] max-w-4xl top-8"
+      }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
-        {/* Photo Logo */}
-        <motion.a
-          href="#"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="relative w-10 h-10 rounded-full border-2 border-cyan/40 overflow-hidden hover:border-cyan hover:shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)] transition-all group"
-        >
-          <img 
-            src="/profile.jpg" 
-            alt="Logo" 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+      <div className={`
+        relative flex items-center justify-between px-6 py-4 
+        transition-all duration-300 ease-out overflow-hidden
+        ${scrolled 
+          ? "bg-white/80 backdrop-blur-md border-[3px] border-[var(--fg-pencil)] shadow-[4px_4px_0px_0px_var(--fg-pencil)] rounded-[var(--radius-wobbly)]" 
+          : "bg-transparent"
+        }
+      `}
+      style={{ borderRadius: scrolled ? "var(--radius-wobbly)" : "24px" }}
+      >
+        {/* Cinematic Sweep Effect (only when scrolled) */}
+        {scrolled && (
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--accent-red)]/10 to-transparent skew-x-12 -translate-x-full pointer-events-none"
+            animate={{
+              translateX: ['-100%', '200%']
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              repeatDelay: 4,
+              ease: "easeInOut"
+            }}
           />
-        </motion.a>
-
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center space-x-10">
-          {navLinks.map((link, i) => (
-            <motion.a
-              key={link.name}
-              href={link.href}
-              initial={{ opacity: 0, y: -20, filter: "blur(5px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ delay: i * 0.1, type: "spring", stiffness: 120 }}
-              className="group relative text-sm font-bold tracking-widest hover:text-cyan hover:animate-glitch transition-all duration-300 py-1"
-            >
-              {link.name}
-              {/* Premium Glow Underline */}
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-cyan shadow-[0_0_15px_#64ffda] transition-all duration-300 group-hover:w-full" />
-              <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-cyan shadow-[0_0_10px_#64ffda] transition-all duration-300 group-hover:w-full delay-75" />
-            </motion.a>
-          ))}
-          <ThemeToggle />
-          <motion.a
-            href="/resume.pdf"
-            initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            transition={{ type: "spring", stiffness: 200 }}
-            className="px-6 py-2 border border-cyan/40 text-cyan rounded-full hover:bg-cyan/10 hover:border-cyan hover:shadow-[0_0_20px_rgba(100,255,218,0.5)] shadow-[0_0_5px_rgba(100,255,218,0.1)] transition-all text-sm font-bold tracking-wider relative overflow-hidden group hover:animate-cyber-pulse"
-          >
-            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-cyan/20 to-transparent -translate-x-full group-hover:animate-[marquee_1s_ease-in-out_infinite]" />
-            Resume
-          </motion.a>
-        </div>
-
-        {/* Mobile Toggle */}
-        <div className="flex items-center md:hidden space-x-4">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-cyan p-2"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            className="fixed inset-0 z-[9999] md:hidden glass-morphism pt-24 px-12"
-          >
-            <div className="flex flex-col space-y-8 items-center">
-              {navLinks.map((link, i) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-xl font-bold tracking-widest hover:text-cyan transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
-              <a
-                href="/resume.pdf"
-                className="px-8 py-4 border border-cyan text-cyan rounded hover:bg-cyan/10 transition-colors text-lg font-mono"
-              >
-                Resume
-              </a>
-            </div>
-          </motion.div>
         )}
-      </AnimatePresence>
-    </nav>
+
+        {/* Logo */}
+        <div className="flex items-center">
+          <motion.button 
+            whileHover={{ scale: 1.05, rotate: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="font-mono text-2xl font-bold text-[var(--fg-pencil)] cursor-pointer hover:underline decoration-wavy decoration-[var(--accent-red)] underline-offset-4"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            aria-label="Scroll to top"
+          >
+            Dipankar<span className="text-[var(--accent-blue)]">.</span>
+          </motion.button>
+        </div>
+
+        {/* Nav Items */}
+        <div className="hidden md:flex items-center gap-2">
+          {navItems.map((item, i) => {
+            const isActive = activeSection === item.id;
+            return (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, y: -20, rotate: -5 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{ 
+                  duration: 0.3, 
+                  delay: 0.2 + i * 0.05,
+                  type: "spring",
+                  bounce: 0.4
+                }}
+                whileHover={{ scale: 1.05, y: -2, rotate: 2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => scrollToSection(item.id)}
+                className={`
+                  relative px-4 py-2 font-sans font-semibold text-sm transition-colors duration-300
+                  ${isActive ? "text-[var(--accent-red)]" : "text-[var(--fg-pencil)]/80 hover:text-[var(--fg-pencil)]"}
+                `}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-active-indicator"
+                    className="absolute inset-0 border-2 border-dashed border-[var(--accent-red)] rounded-[var(--radius-wobbly)] bg-[var(--accent-red)]/5 pointer-events-none"
+                    style={{ borderRadius: "var(--radius-wobbly)" }}
+                    transition={{ type: "spring", bounce: 0.3, duration: 0.4 }}
+                  />
+                )}
+                <span className="relative z-10">{item.name}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Mobile menu toggle (simple sketch lines) */}
+        <button aria-label="Toggle mobile menu" className="md:hidden flex flex-col gap-1.5 cursor-pointer bg-transparent border-none p-2">
+          <motion.div whileHover={{ x: 2 }} className="w-6 h-[3px] bg-[var(--fg-pencil)] rounded-full" />
+          <motion.div whileHover={{ x: -2 }} className="w-4 h-[3px] bg-[var(--fg-pencil)] rounded-full ml-auto" />
+          <motion.div whileHover={{ x: 2 }} className="w-6 h-[3px] bg-[var(--fg-pencil)] rounded-full" />
+        </button>
+      </div>
+    </motion.nav>
   );
 };

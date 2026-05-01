@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Fira_Code } from "next/font/google";
+import { Kalam, Patrick_Hand } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 
-const inter = Inter({
-  variable: "--font-inter",
+const kalam = Kalam({
+  weight: ["400", "700"],
+  variable: "--font-kalam",
   subsets: ["latin"],
 });
 
-const firaCode = Fira_Code({
-  variable: "--font-fira-code",
+const patrickHand = Patrick_Hand({
+  weight: "400",
+  variable: "--font-patrick-hand",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "DevPortfolio | Modern Portfolio",
-  description: "A premium, responsive personal portfolio built with Next.js, Tailwind CSS, and Framer Motion.",
+  title: "Hand-Drawn Dev Portfolio",
+  description: "A creative, hand-drawn personal portfolio.",
 };
 
 export default function RootLayout({
@@ -26,17 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${firaCode.variable} antialiased`}
+        className={`${kalam.variable} ${patrickHand.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
